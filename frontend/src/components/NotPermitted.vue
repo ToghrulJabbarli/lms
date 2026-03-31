@@ -29,8 +29,8 @@ const props = defineProps({
 		default: 'You are not permitted to access this page.',
 	},
 	buttonLabel: {
-		type: String,
-		default: {{ __(buttonLabel) }},
+    	type: String,
+    	default: () => __('Login'), 
 	},
 	buttonLink: {
 		type: String,
