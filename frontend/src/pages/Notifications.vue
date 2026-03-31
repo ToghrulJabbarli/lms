@@ -11,10 +11,10 @@
 			>
 				{{ __('Mark all as read') }}
 			</Button>
-			<TabButtons
-				class="inline-block"
-				:buttons="[{ label: {{ __('Unread') }}, active: true }, { label: {{ __('Read') }} }]"
-				v-model="activeTab"
+			<TabButtons 
+  				class="inline-block" 
+  				:buttons="[{ label: __('Unread'), active: true }, { label: __('Read') }]" 
+  				v-model="activeTab" 
 			/>
 		</div>
 	</header>
