@@ -202,12 +202,6 @@
 							"
 						/>
 					</Tooltip>
-					<Tooltip :text="__('Powered by Frappe Learning')">
-						<Zap
-							class="size-4 stroke-1.5 text-ink-gray-7 cursor-pointer"
-							@click="redirectToWebsite()"
-						/>
-					</Tooltip>
 				</div>
 				<Tooltip
 					:text="
