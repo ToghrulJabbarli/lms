@@ -30,7 +30,7 @@ const props = defineProps({
 	},
 	buttonLabel: {
 		type: String,
-		default: 'Login',
+		default: {{ __(buttonLabel) }},
 	},
 	buttonLink: {
 		type: String,
