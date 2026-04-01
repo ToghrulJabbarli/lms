@@ -87,7 +87,7 @@ import {
 	Sun,
 	Trash2,
 } from 'lucide-vue-next'
-
+import { computed } from 'vue'
 const router = useRouter()
 const { logout, branding } = sessionStore()
 let { userResource } = usersStore()
