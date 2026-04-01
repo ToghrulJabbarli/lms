@@ -133,7 +133,7 @@ const userDropdownOptions = computed(() => {
 			items: [
 				{
 					icon: User,
-					label: 'My Profile',
+					label: __('My Profile'),
 					onClick: () => {
 						router.push(`/user/${userResource.data?.username}`)
 					},
