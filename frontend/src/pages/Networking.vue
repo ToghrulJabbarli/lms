@@ -42,7 +42,7 @@
               target="_blank"
               class="text-ink-gray-4 hover:text-blue-700 transition-colors"
             >
-              <LinkedinIcon class="w-6 h-6" />
+              <Linkedin class="w-6 h-6" />
             </a>
           </div>
 
@@ -83,10 +83,11 @@
 </template>
 
 <script setup>
+import AppLayout from '@/components/Layouts/AppLayout.vue'
 import { ref, computed } from 'vue'
 import { createResource, TextInput, Button, Avatar, LoadingIndicator } from 'frappe-ui'
-import { Linkedin as LinkedinIcon } from 'lucide-vue-next'
-import AppLayout from '@/components/Layouts/AppLayout.vue'
+import { Linkedin } from 'lucide-vue-next'
+
 
 const searchQuery = ref('')
 
