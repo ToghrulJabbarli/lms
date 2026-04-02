@@ -230,6 +230,11 @@ const routes = [
 		component: () => import('@/pages/Search/Search.vue'),
 	},
 	{
+  		path: '/networking',
+  		name: 'Networking',
+  		component: () => import('@/pages/Networking.vue'),
+	},
+	{
 		path: '/data-import',
 		name: 'DataImportList',
 		component: () => import('@/pages/DataImport.vue'),
