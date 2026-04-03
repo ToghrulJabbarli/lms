@@ -662,41 +662,49 @@ watch(settingsStore.settings, () => {
 })
 
 const updateSidebarLinks = () => {
-	sidebarLinks.value = getSidebarLinks()
-	//updateSidebarLinksVisibility()
-	// 2. MANUALLY INJECT NETWORKING HERE (Before the database filter)
-    if (links.length > 0) {
-        // We look for the first group (usually "Learning") and push Networking
-        links[0].items.push({
-            label: 'Networking',
-            icon: Users, // Already imported on line 324
-            to: '/networking',
-        })
+    console.log("Updating Sidebar Links...") // Check this in Browser Inspect (F12)
+    
+    // 1. Get the original links
+    const links = getSidebarLinks()
+
+    // 2. FORCE Networking into the list immediately
+    if (links && links.length > 0) {
+        // We look for the first category (e.g., 'Learning')
+        const firstCategory = links[0]
+        
+        // Only add if it doesn't exist to prevent duplicates
+        if (!firstCategory.items.find(i => i.label === 'Networking')) {
+            firstCategory.items.push({
+                label: 'Networking',
+                icon: Users, // Using the Users icon imported on line 324
+                to: '/networking',
+            })
+        }
     }
 
-    // 3. Immediately set the value so the sidebar isn't empty while waiting for DB
-    sidebarLinks.value = links
+    // 3. Set the sidebar value IMMEDIATELY
+    sidebarLinks.value = [...links]
 
-    // 4. Then try to handle the DB visibility for OTHER links
+    // 4. Update visibility for OTHER links, but PROTECT Networking
     sidebarSettings.reload(
         {},
         {
             onSuccess(data) {
-                // Only hide links that the DB EXPLICITLY says to hide
+                if (!data) return
+                
                 Object.keys(data).forEach((key) => {
                     if (!parseInt(data[key])) {
                         links.forEach((link) => {
-                            link.items = link.items.filter(
-                                (item) => {
-                                    // Never hide Networking, even if the DB doesn't know it
-                                    if (item.label === 'Networking') return true
-                                    return item.label.toLowerCase().split(' ').join('_') !== key
-                                }
-                            )
+                            link.items = link.items.filter((item) => {
+                                // HARD RULE: Never hide Networking
+                                if (item.label === 'Networking') return true
+                                return item.label.toLowerCase().split(' ').join('_') !== key
+                            })
                         })
                     }
                 })
-                sidebarLinks.value = [...links] // Trigger a fresh render
+                // Final render trigger
+                sidebarLinks.value = [...links]
             },
         }
     )
