@@ -667,42 +667,7 @@ const updateSidebarLinks = () => {
     // 1. Get base links from utils
     const links = getSidebarLinks()
 
-    // 2. Inject Networking into the first group safely
-    if (links && links.length > 0) {
-        const firstCategory = links[0]
-        if (!firstCategory.items.find(i => i.label === 'Networking')) {
-            firstCategory.items.push({
-                label: 'Networking',
-                // Using route name prevents the "Site can't be reached" error
-                to: { name: 'Networking' }, 
-                icon: Users, 
-            })
-        }
-    }
-
-    // 3. Set the sidebar value immediately
-    sidebarLinks.value = [...links]
-
-    // 4. Handle visibility settings from database
-    sidebarSettings.reload(
-        {},
-        {
-            onSuccess(data) {
-                if (!data) return
-                Object.keys(data).forEach((key) => {
-                    if (!parseInt(data[key])) {
-                        links.forEach((link) => {
-                            link.items = link.items.filter((item) => {
-                                if (item.label === 'Networking') return true
-                                return item.label.toLowerCase().split(' ').join('_') !== key
-                            })
-                        })
-                    }
-                })
-                sidebarLinks.value = [...links]
-            },
-        }
-    )
+    updateSidebarLinksVisibility()
 }
 
 const redirectToWebsite = () => {
