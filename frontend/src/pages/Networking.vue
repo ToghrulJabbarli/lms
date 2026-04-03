@@ -52,8 +52,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { createResource, TextInput, Button, Avatar, LoadingIndicator } from 'frappe-ui'
-// Icons removed to prevent build errors if lucide version is mismatched
-import AppLayout from '../components/Layouts/AppLayout.vue' 
+import AppLayout from '@/components/Layouts/AppLayout.vue'
 
 const searchQuery = ref('')
 
