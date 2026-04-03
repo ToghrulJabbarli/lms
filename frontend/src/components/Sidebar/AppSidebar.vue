@@ -663,37 +663,44 @@ watch(settingsStore.settings, () => {
 
 
 const updateSidebarLinks = () => {
+    // 1. Get base links
     const links = getSidebarLinks()
 
+    // 2. Add Networking to the base list immediately
     if (links && links.length > 0) {
         const firstCategory = links[0]
         if (!firstCategory.items.find(i => i.label === 'Networking')) {
             firstCategory.items.push({
                 label: 'Networking',
-                // Using route name prevents the "Site can't be reached" error
-                to: { name: 'Networking' }, 
+                to: '/networking', 
                 icon: Users, 
             })
         }
     }
 
-    sidebarLinks.value = [...links]
-
+    // 3. Load the Database settings
     sidebarSettings.reload(
         {},
         {
             onSuccess(data) {
-                if (!data) return
+                if (!data) {
+                    sidebarLinks.value = links
+                    return
+                }
+                
+                // Filter items based on your Baku/Custom settings
                 Object.keys(data).forEach((key) => {
                     if (!parseInt(data[key])) {
                         links.forEach((link) => {
                             link.items = link.items.filter((item) => {
+                                // Always keep Networking
                                 if (item.label === 'Networking') return true
                                 return item.label.toLowerCase().split(' ').join('_') !== key
                             })
                         })
                     }
                 })
+                // ONLY set the value here to prevent the "English flash"
                 sidebarLinks.value = [...links]
             },
         }
