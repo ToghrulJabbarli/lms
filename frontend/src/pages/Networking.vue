@@ -1,5 +1,5 @@
 <template>
-  <AppLayout>
+  <Layout>
     <div class="max-w-5xl mx-auto py-10 px-6">
       <div class="mb-8">
         <h1 class="text-3xl font-bold text-gray-900">{{ __('Professional Network') }}</h1>
@@ -46,15 +46,25 @@
         <p class="text-gray-500">{{ __('No profiles found matching your search.') }}</p>
       </div>
     </div>
-  </AppLayout>
+  </Layout>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
 import { createResource, TextInput, Button, Avatar, LoadingIndicator } from 'frappe-ui'
-import AppLayout from '@/components/Layouts/AppLayout.vue'
+import { useScreenSize } from '../utils/composables'
 
+// Layout Imports based on your App.vue
+import DesktopLayout from '../components/DesktopLayout.vue'
+import MobileLayout from '../components/MobileLayout.vue'
+
+const { isMobile } = useScreenSize()
 const searchQuery = ref('')
+
+// Compute which layout to use just like your App.vue does
+const Layout = computed(() => {
+  return isMobile.value ? MobileLayout : DesktopLayout
+})
 
 const profiles = createResource({
   url: 'data_platform.api.get_networking_feed',
