@@ -672,7 +672,7 @@ const updateSidebarLinks = () => {
         if (!firstCategory.items.find(i => i.label === 'Networking')) {
             firstCategory.items.push({
                 label: 'Networking',
-                to: '/networking', 
+                to: 'lms/networking', 
                 icon: Users, 
             })
         }
