@@ -665,16 +665,37 @@ const updateSidebarLinks = () => {
 	sidebarLinks.value = getSidebarLinks()
 	//updateSidebarLinksVisibility()
 	sidebarSettings.reload(
-        {},
-        {
-            onSuccess(data) {
-                // This original logic hides links. 
-                // Since "Networking" isn't in your DB settings yet, 
-                // we ensure it stays visible here.
-                sidebarLinks.value = links 
-            },
+    {},
+    {
+      onSuccess(data) {
+        // 3. Process existing links based on DB settings
+        Object.keys(data).forEach((key) => {
+          if (!parseInt(data[key])) {
+            links.forEach((link) => {
+              link.items = link.items.filter(
+                (item) => item.label.toLowerCase().split(' ').join('_') !== key
+              )
+            })
+          }
+        })
+
+        // 4. SOLID INJECTION: Add Networking directly to the first group
+        // This ensures it bypasses the DB filter and always shows up.
+        if (links.length > 0) {
+          const hasNetworking = links[0].items.some(i => i.label === 'Networking')
+          if (!hasNetworking) {
+            links[0].items.push({
+              label: 'Networking',
+              icon: Users, // Using the icon already imported on line 324
+              to: '/networking',
+            })
+          }
         }
-    )
+
+        sidebarLinks.value = links
+      },
+    }
+  )
 }
 
 const redirectToWebsite = () => {
