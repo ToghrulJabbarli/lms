@@ -480,11 +480,6 @@ const getSidebarItems = () => {
 					},
 				},
 				{
-          			label: 'Networking',
-          			to: '/networking',
-          			icon: Users, // Users is already imported in this file usually
-        		},
-				{
 					label: 'Batches',
 					icon: 'Users',
 					to: 'Batches',
