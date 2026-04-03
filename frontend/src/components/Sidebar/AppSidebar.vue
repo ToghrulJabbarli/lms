@@ -664,38 +664,42 @@ watch(settingsStore.settings, () => {
 const updateSidebarLinks = () => {
 	sidebarLinks.value = getSidebarLinks()
 	//updateSidebarLinksVisibility()
-	sidebarSettings.reload(
-    {},
-    {
-      onSuccess(data) {
-        // 3. Process existing links based on DB settings
-        Object.keys(data).forEach((key) => {
-          if (!parseInt(data[key])) {
-            links.forEach((link) => {
-              link.items = link.items.filter(
-                (item) => item.label.toLowerCase().split(' ').join('_') !== key
-              )
-            })
-          }
+	// 2. MANUALLY INJECT NETWORKING HERE (Before the database filter)
+    if (links.length > 0) {
+        // We look for the first group (usually "Learning") and push Networking
+        links[0].items.push({
+            label: 'Networking',
+            icon: Users, // Already imported on line 324
+            to: '/networking',
         })
-
-        // 4. SOLID INJECTION: Add Networking directly to the first group
-        // This ensures it bypasses the DB filter and always shows up.
-        if (links.length > 0) {
-          const hasNetworking = links[0].items.some(i => i.label === 'Networking')
-          if (!hasNetworking) {
-            links[0].items.push({
-              label: 'Networking',
-              icon: Users, // Using the icon already imported on line 324
-              to: '/networking',
-            })
-          }
-        }
-
-        sidebarLinks.value = links
-      },
     }
-  )
+
+    // 3. Immediately set the value so the sidebar isn't empty while waiting for DB
+    sidebarLinks.value = links
+
+    // 4. Then try to handle the DB visibility for OTHER links
+    sidebarSettings.reload(
+        {},
+        {
+            onSuccess(data) {
+                // Only hide links that the DB EXPLICITLY says to hide
+                Object.keys(data).forEach((key) => {
+                    if (!parseInt(data[key])) {
+                        links.forEach((link) => {
+                            link.items = link.items.filter(
+                                (item) => {
+                                    // Never hide Networking, even if the DB doesn't know it
+                                    if (item.label === 'Networking') return true
+                                    return item.label.toLowerCase().split(' ').join('_') !== key
+                                }
+                            )
+                        })
+                    }
+                })
+                sidebarLinks.value = [...links] // Trigger a fresh render
+            },
+        }
+    )
 }
 
 const redirectToWebsite = () => {
