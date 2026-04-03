@@ -445,11 +445,6 @@ const getSidebarItems = () => {
 					},
 				},
 				{
-  					label: 'Networking',
-  					to: '/networking',
-  					icon: Users, // This icon is already imported in your Sidebar
-					},
-				{
 					label: 'Notifications',
 					icon: 'Bell',
 					to: 'Notifications',
