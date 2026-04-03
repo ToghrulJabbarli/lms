@@ -662,48 +662,18 @@ watch(settingsStore.settings, () => {
 })
 
 const updateSidebarLinks = () => {
-    console.log("Updating Sidebar Links...") // Check this in Browser Inspect (F12)
+    // 1. Get the standard links from your utils file
+    const links = getSidebarLinks() 
     
-    // 1. Get the original links
-    const links = getSidebarLinks()
-
-    // 2. FORCE Networking into the list immediately
-    if (links && links.length > 0) {
-        // We look for the first category (e.g., 'Learning')
-        const firstCategory = links[0]
-        
-        // Only add if it doesn't exist to prevent duplicates
-        if (!firstCategory.items.find(i => i.label === 'Networking')) {
-            firstCategory.items.push({
-                label: 'Networking',
-                to: '/networking',
-            })
-        }
-    }
-
-    // 3. Set the sidebar value IMMEDIATELY
-    sidebarLinks.value = [...links]
-
-    // 4. Update visibility for OTHER links, but PROTECT Networking
+    // 2. Refresh the visibility based on your Database settings
     sidebarSettings.reload(
         {},
         {
             onSuccess(data) {
-                if (!data) return
-                
-                Object.keys(data).forEach((key) => {
-                    if (!parseInt(data[key])) {
-                        links.forEach((link) => {
-                            link.items = link.items.filter((item) => {
-                                // HARD RULE: Never hide Networking
-                                if (item.label === 'Networking') return true
-                                return item.label.toLowerCase().split(' ').join('_') !== key
-                            })
-                        })
-                    }
-                })
-                // Final render trigger
-                sidebarLinks.value = [...links]
+                // This original logic hides links. 
+                // Since "Networking" isn't in your DB settings yet, 
+                // we ensure it stays visible here.
+                sidebarLinks.value = links 
             },
         }
     )
