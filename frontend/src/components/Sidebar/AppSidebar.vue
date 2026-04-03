@@ -663,7 +663,18 @@ watch(settingsStore.settings, () => {
 
 const updateSidebarLinks = () => {
 	sidebarLinks.value = getSidebarLinks()
-	updateSidebarLinksVisibility()
+	//updateSidebarLinksVisibility()
+	sidebarSettings.reload(
+        {},
+        {
+            onSuccess(data) {
+                // This original logic hides links. 
+                // Since "Networking" isn't in your DB settings yet, 
+                // we ensure it stays visible here.
+                sidebarLinks.value = links 
+            },
+        }
+    )
 }
 
 const redirectToWebsite = () => {
