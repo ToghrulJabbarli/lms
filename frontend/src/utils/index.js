@@ -19,6 +19,7 @@ import SimpleImage from '@editorjs/simple-image'
 import Table from '@editorjs/table'
 import Plyr from 'plyr'
 import 'plyr/dist/plyr.css'
+import { Users} from 'lucide-vue-next'
 import DOMPurify from 'dompurify'
 
 const readOnlyMode = window.read_only_mode
