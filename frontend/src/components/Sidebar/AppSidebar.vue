@@ -676,7 +676,6 @@ const updateSidebarLinks = () => {
         if (!firstCategory.items.find(i => i.label === 'Networking')) {
             firstCategory.items.push({
                 label: 'Networking',
-                icon: Users, // Using the Users icon imported on line 324
                 to: '/networking',
             })
         }
