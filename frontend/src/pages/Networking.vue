@@ -111,7 +111,7 @@ const searchQuery = ref('')
 
 
 const profiles = createResource({
-  url: 'lms.api.get_networking_feed', 
+  url: 'lms.lms.api.get_networking_feed', 
   auto: true,
 })
 	
