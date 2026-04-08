@@ -109,11 +109,15 @@ import { Search, Users } from 'lucide-vue-next' // Ensure these icons are availa
 
 const searchQuery = ref('')
 
-const profiles = createResource({
-  url: 'lms.api.get_networking_feed', 
-  auto: true,
-})
 
+const profiles = createResource({
+  url: 'frappe.client.get_list',
+  params: {
+    doctype: 'Networking Profile',
+    fields: ['user', 'position', 'industry', 'location', 'name']
+  },
+  auto: true
+})
 const filteredProfiles = computed(() => {
   const allProfiles = profiles.data || []
   const q = searchQuery.value.toLowerCase().trim()
