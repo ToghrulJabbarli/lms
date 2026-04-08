@@ -111,13 +111,10 @@ const searchQuery = ref('')
 
 
 const profiles = createResource({
-  url: 'frappe.client.get_list',
-  params: {
-    doctype: 'Networking Profile',
-    fields: ['user', 'position', 'industry', 'location', 'name']
-  },
-  auto: true
+  url: 'lms.api.get_networking_feed', 
+  auto: true,
 })
+	
 const filteredProfiles = computed(() => {
   const allProfiles = profiles.data || []
   const q = searchQuery.value.toLowerCase().trim()
