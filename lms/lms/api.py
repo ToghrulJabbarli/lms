@@ -2364,3 +2364,12 @@ def search_users_by_role(txt: str = "", roles: str | list | None = None, page_le
 		{"value": r.name, "description": r.full_name or r.name, "label": r.full_name or r.name}
 		for r in results
 	]
+	
+@frappe.whitelist()
+def get_networking_feed():
+    # Fetch data from the DocType located in the LMS app
+    return frappe.get_all(
+        "Networking Profile",
+        fields=["user", "position", "industry", "location", "name"],
+        filters={"docstatus": 0}
+    )
