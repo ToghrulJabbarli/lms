@@ -62,10 +62,15 @@ const profiles = createResource({
 
 const filteredProfiles = computed(() => {
   if (!profiles.data) return []
-  const q = searchQuery.value.toLowerCase()
-  return profiles.data.filter(p => 
-    (p.user || '').toLowerCase().includes(q) || 
-    (p.position || '').toLowerCase().includes(q)
-  )
+  const q = searchQuery.value.toLowerCase().trim()
+  
+  return profiles.data.filter(p => {
+    // We use (field || '') to ensure we don't try to search an empty value
+    const name = (p.user || '').toLowerCase()
+    const pos = (p.position || '').toLowerCase()
+    const ind = (p.industry || '').toLowerCase()
+    
+    return name.includes(q) || pos.includes(q) || ind.includes(q)
+  })
 })
 </script>
