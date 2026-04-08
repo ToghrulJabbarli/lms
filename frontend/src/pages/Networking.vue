@@ -52,12 +52,14 @@
 import { ref, computed } from 'vue'
 import { createResource, TextInput, Button, Avatar, LoadingIndicator } from 'frappe-ui'
 
-// We removed the Layout imports entirely because App.vue handles them globally.
 const searchQuery = ref('')
 
 const profiles = createResource({
-  url: 'data_platform.api.get_networking_feed',
+  url: 'lms.api.get_networking_feed', 
   auto: true,
+  onSuccess: (data) => {
+    console.log("LMS API Data:", data)
+  }
 })
 
 const filteredProfiles = computed(() => {
@@ -65,7 +67,6 @@ const filteredProfiles = computed(() => {
   const q = searchQuery.value.toLowerCase().trim()
   
   return profiles.data.filter(p => {
-    // We use (field || '') to ensure we don't try to search an empty value
     const name = (p.user || '').toLowerCase()
     const pos = (p.position || '').toLowerCase()
     const ind = (p.industry || '').toLowerCase()
