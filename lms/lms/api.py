@@ -2370,6 +2370,6 @@ def get_networking_feed():
     # Fetch data from the DocType located in the LMS app
     return frappe.get_all(
         "Networking Profile",
-        fields=["user", "position", "industry", "location", "name"],
+        fields=["user", "position", "industry"],
         filters={"docstatus": 0}
     )
