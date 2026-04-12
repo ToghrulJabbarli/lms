@@ -103,9 +103,11 @@ const isToday = (date) => date.isSame(dayjs(), 'day')
 
 const getLessonsForDate = (date) => {
   if (!lessons.data) return []
-  return lessons.data.filter(l => 
-    dayjs(l.lesson_date).isSame(date, 'day')
-  )
+  return lessons.data.filter(l => {
+    // We use lesson_date now as defined in the Python fields list
+    if (!l.lesson_date) return false
+    return dayjs(l.lesson_date).format('YYYY-MM-DD') === date.format('YYYY-MM-DD')
+  })
 }
 
 const hasLesson = (date) => getLessonsForDate(date).length > 0
