@@ -2382,8 +2382,8 @@ def get_student_lessons():
     return frappe.get_all(
         "LMS Private Lesson",
         filters={"student": user},
-        fields=["name", "scheduled_date", "status", "teacher", "notes"],
-        order_by="scheduled_date asc"
+        fields=["name", "lesson_date", "status", "teacher", "notes"],
+        order_by="lesson_date asc"
     )
 
 @frappe.whitelist()
@@ -2396,13 +2396,13 @@ def get_attendance_metrics():
     lessons = frappe.get_all(
         "LMS Private Lesson", 
         filters={"student": user}, 
-        fields=["status", "scheduled_date"]
+        fields=["status", "lesson_date"]
     )
     
     # Basic logic for your dashboard cards
     total_completed = len([l for l in lessons if l.status == 'Attended'])
-    monthly_attended = len([l for l in lessons if l.status == 'Attended' and getdate(l.scheduled_date).month == today.month])
-    monthly_absent = len([l for l in lessons if l.status == 'Absent' and getdate(l.scheduled_date).month == today.month])
+    monthly_attended = len([l for l in lessons if l.status == 'Attended' and getdate(l.lesson_date).month == today.month])
+    monthly_absent = len([l for l in lessons if l.status == 'Absent' and getdate(l.lesson_date).month == today.month])
 
     return {
         "total_completed": total_completed,
