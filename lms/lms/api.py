@@ -2381,7 +2381,7 @@ def get_student_lessons(student=None):
         
     return frappe.get_all(
         "LMS Private Lesson",
-        filters={"student": student},
+        filters={"student": user},
         fields=["name", "scheduled_date", "status", "teacher"]
     )
 
