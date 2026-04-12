@@ -66,6 +66,11 @@ const routes = [
 		component: () => import('@/pages/Statistics.vue'),
 	},
 	{
+  		path: '/lesson-calendar',
+  		name: 'LessonCalendar',
+  		component: () => import('@/pages/CalendarView.vue'),
+	},
+	{
 		path: '/user/:username',
 		name: 'Profile',
 		component: () => import('@/pages/Profile.vue'),
