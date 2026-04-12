@@ -267,6 +267,7 @@ import {
 } from 'vue'
 import {
 	BookOpen,
+	Calendar, // <--- New Import
 	CircleAlert,
 	ChevronRight,
 	ChevronsRight,
@@ -666,14 +667,25 @@ const updateSidebarLinks = () => {
     // 1. Get base links
     const links = getSidebarLinks()
 
-    // 2. Add Networking to the base list immediately
+    // 2. Add custom links to the base list immediately
     if (links && links.length > 0) {
         const firstCategory = links[0]
+        
+        // Networking
         if (!firstCategory.items.find(i => i.label === 'Networking')) {
             firstCategory.items.push({
                 label: 'Networking',
                 to: 'lms/networking', 
                 icon: Users, 
+            })
+        }
+
+        // Lesson Calendar
+        if (!firstCategory.items.find(i => i.label === 'Lesson Calendar')) {
+            firstCategory.items.push({
+                label: 'Lesson Calendar',
+                to: '/lesson-calendar', 
+                icon: Calendar, 
             })
         }
     }
@@ -688,19 +700,18 @@ const updateSidebarLinks = () => {
                     return
                 }
                 
-                // Filter items based on your Baku/Custom settings
+                // Filter items based on database configuration
                 Object.keys(data).forEach((key) => {
                     if (!parseInt(data[key])) {
                         links.forEach((link) => {
                             link.items = link.items.filter((item) => {
-                                // Always keep Networking
-                                if (item.label === 'Networking') return true
+                                // Always protect these custom links from being hidden by the filter
+                                if (item.label === 'Networking' || item.label === 'Lesson Calendar') return true
                                 return item.label.toLowerCase().split(' ').join('_') !== key
                             })
                         })
                     }
                 })
-                // ONLY set the value here to prevent the "English flash"
                 sidebarLinks.value = [...links]
             },
         }
