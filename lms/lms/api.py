@@ -2373,3 +2373,49 @@ def get_networking_feed():
         fields=["user", "position", "industry"],
         filters={"docstatus": 0}
     )
+
+@frappe.whitelist()
+def get_student_lessons(student=None):
+    if not student:
+        student = frappe.session.user
+        
+    return frappe.get_all(
+        "LMS Private Lesson",
+        filters={"student": student},
+        fields=["name", "scheduled_date", "status", "teacher"]
+    )
+
+@frappe.whitelist()
+def get_attendance_metrics(student=None):
+    if not student:
+        student = frappe.session.user
+
+    today = getdate(nowdate())
+    start_date = get_first_day(today)
+    end_date = get_last_day(today)
+
+    # Fetch lessons for the current month
+    monthly_lessons = frappe.get_all(
+        "LMS Private Lesson",
+        filters={
+            "student": student,
+            "scheduled_date": ["between", [start_date, end_date]]
+        },
+        fields=["status"]
+    )
+
+    total_attended = len([d for d in monthly_lessons if d.status == "Attended"])
+    total_absent = len([d for d in monthly_lessons if d.status == "Absent"])
+    
+    total_completed = frappe.db.count("LMS Private Lesson", {
+        "student": student, 
+        "status": "Attended"
+    })
+
+    return {
+        "monthly_attended": total_attended,
+        "monthly_absent": total_absent,
+        "total_completed": total_completed,
+        "allowed_skips_left": max(0, 2 - total_absent),
+        "month_name": today.strftime("%B")
+    }
