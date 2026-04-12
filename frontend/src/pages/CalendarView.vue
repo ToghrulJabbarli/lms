@@ -70,29 +70,26 @@ import { computed } from 'vue'
 
 // 1. Fetch Lessons
 const lessons = createResource({
-  url: 'lms.api.get_student_lessons',
+  url: 'lms.lms.api.get_student_lessons',
   auto: true,
 })
 
 // 2. Fetch Metrics
 const metrics = createResource({
-  url: 'lms.api.get_attendance_metrics',
+  url: 'lms.lms.api.get_attendance_metrics',
   auto: true,
 })
 
-// --- Calendar Logic ---
 
 const currentMonth = dayjs()
 const currentMonthName = computed(() => currentMonth.format('MMMM YYYY'))
 
-// Calculates how many empty slots we need at the start of the grid
 const firstDayOfMonthOffset = computed(() => {
   const firstDay = currentMonth.startOf('month').day() // 0 (Sun) to 6 (Sat)
   // Adjust so Monday is first (Frappe standard)
   return firstDay === 0 ? 6 : firstDay - 1
 })
 
-// Generates array of dayjs objects for the current month
 const daysInMonth = computed(() => {
   const count = currentMonth.daysInMonth()
   return Array.from({ length: count }, (_, i) => 
@@ -102,7 +99,7 @@ const daysInMonth = computed(() => {
 
 const isToday = (date) => date.isSame(dayjs(), 'day')
 
-// --- Lesson Logic ---
+
 
 const getLessonsForDate = (date) => {
   if (!lessons.data) return []
@@ -117,7 +114,6 @@ const getLessonStatusClass = (date) => {
   const dayLessons = getLessonsForDate(date)
   if (dayLessons.length === 0) return ''
   
-  // Use the status of the first lesson of the day for coloring
   const status = dayLessons[0].status
   if (status === 'Attended') return 'bg-green-50 border-green-200 text-green-700'
   if (status === 'Absent') return 'bg-red-50 border-red-200 text-red-700'
